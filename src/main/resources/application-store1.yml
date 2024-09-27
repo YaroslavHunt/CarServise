@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: spring
+
+reference-data:
+  engineTypes: Бензиновий, Дизельний, Гібридний
+  fuels:
+    - name: Дизель
+      types: Зимовий, Літній, Арктичний
+    - name: Бензин
+      types: A-95, A-98, A-100
+    - name: Електрика
+      types:
