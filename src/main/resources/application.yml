@@ -1,6 +1,21 @@
 spring:
   application:
-    name: spring
+    name: main
 
   profiles:
-    active: store1
+    active: store1, store2
+
+  datasource:
+    url: "jdbc:mysql://localhost:3306/cars?createDatabaseIfNotExist=true"
+    username: "root"
+    password: "8520456Ss@"
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+
+

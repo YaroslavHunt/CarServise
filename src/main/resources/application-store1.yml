@@ -1,6 +1,6 @@
 spring:
   application:
-    name: spring
+    name: engine and fuels
 
 reference-data:
   engineTypes: Бензиновий, Дизельний, Гібридний
