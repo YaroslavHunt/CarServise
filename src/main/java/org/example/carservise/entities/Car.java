@@ -19,5 +19,6 @@ public class Car {
     @Setter(AccessLevel.NONE)
     private Long id;
     private String model;
-    private Integer enginePower ;
+    private Integer enginePower;
+    private Integer torque;
 }
