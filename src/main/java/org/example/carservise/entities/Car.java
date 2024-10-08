@@ -4,6 +4,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Setter;
@@ -18,7 +20,10 @@ public class Car {
     @GeneratedValue(strategy = IDENTITY)
     @Setter(AccessLevel.NONE)
     private Long id;
+    @NotNull
     private String model;
+    @Positive(message = "Engine power must be greater than 0.")
     private Integer enginePower;
+    @Positive(message = "Torque must be greater than 0.")
     private Integer torque;
 }

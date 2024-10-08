@@ -1,9 +1,10 @@
 package org.example.carservise.controllers;
 
-import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.example.carservise.dto.CarDTO;
 import org.example.carservise.entities.Car;
-import org.example.carservise.repositories.CarRepository;
+import org.example.carservise.service.CarService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,54 +16,41 @@ import java.util.List;
 @RequestMapping("/cars")
 public class CarController {
 
-    private final CarRepository carRepository;
+    private final CarService carService;
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<Car> getCars(@RequestParam(required = false) Integer minEnginePower,
-                             @RequestParam(required = false) Integer maxEnginePower) {
-        if (minEnginePower != null && maxEnginePower != null) {
-            return carRepository.findByEnginePowerBetween(minEnginePower, maxEnginePower);
-        } else if (minEnginePower != null) {
-            return carRepository.findByEnginePowerGreaterThanEqual(minEnginePower);
-        } else if (maxEnginePower != null) {
-            return carRepository.findByEnginePowerLessThanEqual(maxEnginePower);
-        } else {
-            return carRepository.findAll();
-        }
+    public ResponseEntity<List<CarDTO>> getCars(@RequestParam(required = false) Integer minEnginePower,
+                                                @RequestParam(required = false) Integer maxEnginePower) {
+        List<CarDTO> cars = carService.getCars(minEnginePower, maxEnginePower);
+        return ResponseEntity.ok(cars);
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Car> getCar(@PathVariable Long id) {
-        return ResponseEntity.of(carRepository.findById(id));
+    public ResponseEntity<CarDTO> getCar(@PathVariable Long id) {
+        CarDTO carDTO = carService.getCar(id);
+        return ResponseEntity.ok(carDTO);
     }
 
     @PostMapping
-    public ResponseEntity<Car> createCar(@RequestBody Car car) {
-        return ResponseEntity.ok(carRepository.save(car));
+    public ResponseEntity<CarDTO> createCar(@RequestBody @Valid CarDTO carDTO) {
+        CarDTO savedCarDTO = carService.createCar(carDTO);
+        return ResponseEntity.ok(savedCarDTO);
     }
 
-    @Transactional
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public ResponseEntity<Car> updateCar(@RequestBody Car newCar, @PathVariable(name = "id") Long carId) {
-        return ResponseEntity.of(
-                carRepository
-                        .findById(carId)
-                        .map(updatingCar -> {
-                            updatingCar.setModel(newCar.getModel());
-                            updatingCar.setEnginePower(newCar.getEnginePower());
-//                            return carRepository.save(updatingCar); //save is not required as there is @Transactional
-                            return updatingCar;
-                        })
-        );
+    public ResponseEntity<CarDTO> updateCar(@RequestBody Car newCar, @PathVariable Long id) {
+        CarDTO updatedCarDTO = carService.updateCar(id, newCar);
+        return ResponseEntity.ok(updatedCarDTO);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCar(@PathVariable(name = "id") Long carId) {
-        carRepository.deleteById(carId);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Void> deleteCar(@PathVariable Long id) {
+        carService.deleteCar(id);
+        return ResponseEntity.noContent().build();
     }
+
 }
 
