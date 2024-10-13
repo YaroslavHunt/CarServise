@@ -29,7 +29,7 @@ public class CarController {
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<CarDTO> getCar(@PathVariable Long id) {
-        CarDTO carDTO = carService.getCar(id);
+        CarDTO carDTO = carService.getCarById(id);
         return ResponseEntity.ok(carDTO);
     }
 

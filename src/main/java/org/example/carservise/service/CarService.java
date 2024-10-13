@@ -4,7 +4,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.example.carservise.dto.CarDTO;
 import org.example.carservise.entities.Car;
-import org.example.carservise.mapper.CarMapper;
+import org.example.carservise.mappers.CarMapper;
 import org.example.carservise.repositories.CarRepository;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +31,7 @@ public class CarService {
         return cars.stream().map(carMapper::mapToDTO).toList();
     }
 
-    public CarDTO getCar(Long id) {
+    public CarDTO getCarById(Long id) {
         Car car = carRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Car with id=%s not found".formatted(id)));
         return carMapper.mapToDTO(car);

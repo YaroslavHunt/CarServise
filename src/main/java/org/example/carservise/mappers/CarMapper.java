@@ -1,4 +1,4 @@
-package org.example.carservise.mapper;
+package org.example.carservise.mappers;
 
 import org.example.carservise.dto.CarDTO;
 import org.example.carservise.entities.Car;

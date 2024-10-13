@@ -17,5 +17,8 @@ spring:
     properties:
       hibernate:
         format_sql: true
-
+  data:
+    mongodb:
+      uri: mongodb+srv://root:root@cluster0.pssfk.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+      database: car-service
 
