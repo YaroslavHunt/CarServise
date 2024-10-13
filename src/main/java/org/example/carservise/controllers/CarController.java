@@ -1,10 +1,9 @@
 package org.example.carservise.controllers;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.carservise.dto.CarDTO;
 import org.example.carservise.entities.Car;
-import org.example.carservise.service.CarService;
+import org.example.carservise.services.CarService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +18,6 @@ public class CarController {
     private final CarService carService;
 
     @GetMapping
-    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<List<CarDTO>> getCars(@RequestParam(required = false) Integer minEnginePower,
                                                 @RequestParam(required = false) Integer maxEnginePower) {
         List<CarDTO> cars = carService.getCars(minEnginePower, maxEnginePower);
@@ -34,9 +32,9 @@ public class CarController {
     }
 
     @PostMapping
-    public ResponseEntity<CarDTO> createCar(@RequestBody @Valid CarDTO carDTO) {
-        CarDTO savedCarDTO = carService.createCar(carDTO);
-        return ResponseEntity.ok(savedCarDTO);
+    @ResponseStatus(HttpStatus.CREATED)
+    public CarDTO createCar(@RequestBody CarDTO carDTO) {
+        return carService.createCar(carDTO);
     }
 
     @PutMapping("/{id}")

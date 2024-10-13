@@ -3,7 +3,7 @@ package org.example.carservise.controllers;
 import lombok.RequiredArgsConstructor;
 import org.example.carservise.dto.MaintenanceDTO;
 import org.example.carservise.entities.Maintenance;
-import org.example.carservise.service.MaintenanceService;
+import org.example.carservise.services.MaintenanceService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

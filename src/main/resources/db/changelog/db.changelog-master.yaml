@@ -18,6 +18,7 @@ databaseChangeLog:
               - column:
                   name: "engine_power"
                   type: "numeric"
+
   - changeSet:
       id: "1.0.2"
       author: "admin"
@@ -28,3 +29,49 @@ databaseChangeLog:
               - column:
                   name: "torque"
                   type: "numeric"
+
+  - changeSet:
+      id: "1.0.3"
+      author: "admin"
+      changes:
+        - createTable:
+            tableName: "owners"
+            columns:
+              - column:
+                  name: "id"
+                  type: "bigint"
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    unique: true
+              - column:
+                  name: "username"
+                  type: "varchar(255)"
+              - column:
+                  name: "email"
+                  type: "varchar(255)"
+  - changeSet:
+      id: "1.0.4"
+      author: "admin"
+      changes:
+        - addColumn:
+            tableName: "cars"
+            columns:
+              - column:
+                  name: "owner_id"
+                  type: "bigint"
+                  constraints:
+                    nullable: true
+
+        - addForeignKeyConstraint:
+            baseTableName: "cars"
+            baseColumnNames: "owner_id"
+            referencedTableName: "owners"
+            referencedColumnNames: "id"
+            constraintName: "fk_cars_owner"
+
+
+
+
+
+

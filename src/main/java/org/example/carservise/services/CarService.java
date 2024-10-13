@@ -1,20 +1,26 @@
-package org.example.carservise.service;
+package org.example.carservise.services;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.example.carservise.dto.CarDTO;
 import org.example.carservise.entities.Car;
+import org.example.carservise.entities.Owner;
 import org.example.carservise.mappers.CarMapper;
 import org.example.carservise.repositories.CarRepository;
+import org.example.carservise.repositories.OwnerRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @Service
 @RequiredArgsConstructor
 public class CarService {
 
     private final CarRepository carRepository;
+    private final OwnerRepository ownerRepository;
     private final CarMapper carMapper;
 
     public List<CarDTO> getCars(Integer minEnginePower, Integer maxEnginePower) {
@@ -32,27 +38,40 @@ public class CarService {
     }
 
     public CarDTO getCarById(Long id) {
-        Car car = carRepository.findById(id)
+        return carRepository.findById(id)
+                .map(carMapper::mapToDTO)
                 .orElseThrow(() -> new IllegalArgumentException("Car with id=%s not found".formatted(id)));
-        return carMapper.mapToDTO(car);
     }
 
     public CarDTO createCar(CarDTO carDTO) {
-        Car car = carMapper.mapToEntity(carDTO);
-        Car savedCar = carRepository.save(car);
-        return carMapper.mapToDTO(savedCar);
+        Owner owner = null;
+        if (carDTO.getOwnerUsername() != null) {
+            owner = ownerRepository.findByUsername(carDTO.getOwnerUsername())
+                    .orElseThrow(() -> new ResponseStatusException(
+                            BAD_REQUEST,
+                            "Owner with username '%s' not found".formatted(carDTO.getOwnerUsername())
+                    ));
+        }
+        Car car = carMapper.mapToEntity(carDTO, owner);
+        return carMapper.mapToDTO(carRepository.save(car));
     }
 
     @Transactional
     public CarDTO updateCar(Long carId, Car newCar) {
-        return carRepository.findById(carId)
-                .map(updatingCar -> {
-                    updatingCar.setModel(newCar.getModel());
-                    updatingCar.setEnginePower(newCar.getEnginePower());
-                    updatingCar.setTorque(newCar.getTorque());
-                    return carMapper.mapToDTO(updatingCar);
-                })
+        Car existingCar = carRepository.findById(carId)
                 .orElseThrow(() -> new IllegalArgumentException("Car with id=%s not found".formatted(carId)));
+        existingCar.setModel(newCar.getModel());
+        existingCar.setEnginePower(newCar.getEnginePower());
+        existingCar.setTorque(newCar.getTorque());
+        if (newCar.getOwner() != null) {
+            Owner owner = ownerRepository.findById(newCar.getOwner().getId())
+                    .orElseThrow(() -> new IllegalArgumentException("Owner not found"));
+            existingCar.setOwner(owner);
+        } else {
+            existingCar.setOwner(null);
+        }
+        Car updatedCar = carRepository.save(existingCar);
+        return carMapper.mapToDTO(updatedCar);
     }
 
     public void deleteCar(Long carId) {

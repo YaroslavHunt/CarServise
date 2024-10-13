@@ -1,4 +1,4 @@
-package org.example.carservise.service;
+package org.example.carservise.services;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;

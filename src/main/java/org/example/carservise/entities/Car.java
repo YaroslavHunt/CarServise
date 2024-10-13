@@ -1,9 +1,6 @@
 package org.example.carservise.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.AccessLevel;
@@ -26,4 +23,8 @@ public class Car {
     private Integer enginePower;
     @Positive(message = "Torque must be greater than 0.")
     private Integer torque;
+
+    @ManyToOne
+    @JoinColumn(name = "owner_id", referencedColumnName = "id")
+    private Owner owner;
 }

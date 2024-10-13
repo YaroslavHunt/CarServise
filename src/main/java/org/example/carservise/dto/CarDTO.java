@@ -13,4 +13,5 @@ public class CarDTO {
     private Integer enginePower;
     @Positive(message = "Torque must be greater than 0.")
     private Integer torque;
+    private String ownerUsername;
 }
