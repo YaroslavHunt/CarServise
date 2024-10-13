@@ -34,7 +34,7 @@ public class MaintenanceController {
         return ResponseEntity.ok(maintenance);
     }
 
-    @PutMapping("{/id}")
+    @PutMapping("/{id}")
     public ResponseEntity<MaintenanceDTO> updateMaintenance(@PathVariable Long id, @RequestBody Maintenance maintenance) {
         MaintenanceDTO updatedMaintenance = maintenanceService.updateMaintenance(id, maintenance);
         return ResponseEntity.ok(updatedMaintenance);

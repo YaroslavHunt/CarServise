@@ -1,7 +1,9 @@
 package org.example.carservise.repositories;
 
 import org.example.carservise.entities.Maintenance;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.stereotype.Repository;
 
-public interface MaintenanceRepository extends JpaRepository<Maintenance, Long> {
+@Repository
+public interface MaintenanceRepository extends MongoRepository<Maintenance, Long> {
 }
