@@ -21,4 +21,21 @@ spring:
     mongodb:
       uri: mongodb+srv://root:root@cluster0.pssfk.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
       database: car-service
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${mail-sender}
+    password: ${mail-password}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls.enable: true
+
+
+
+
+
+
+
 

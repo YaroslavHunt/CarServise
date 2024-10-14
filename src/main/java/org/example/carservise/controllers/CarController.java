@@ -1,5 +1,6 @@
 package org.example.carservise.controllers;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.carservise.dto.CarDTO;
 import org.example.carservise.entities.Car;
@@ -33,7 +34,7 @@ public class CarController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CarDTO createCar(@RequestBody CarDTO carDTO) {
+    public CarDTO createCar(@RequestBody @Valid CarDTO carDTO) {
         return carService.createCar(carDTO);
     }
 
