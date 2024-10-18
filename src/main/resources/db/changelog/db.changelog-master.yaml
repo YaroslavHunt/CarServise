@@ -70,6 +70,37 @@ databaseChangeLog:
             referencedColumnNames: "id"
             constraintName: "fk_cars_owner"
 
+  - changeSet:
+      id: "1.0.4"
+      author: "admin"
+      changes:
+        - createSequence:
+            sequenceName: "users_seq"
+        - createTable:
+            tableName: "users"
+            columns:
+              - column:
+                  name: "id"
+                  type: "bigint"
+                  constraints:
+                    primaryKey: true
+                    unique: true
+                  defaultValueSequenceNext: "users_seq"
+              - column:
+                  name: "username"
+                  type: "text"
+                  constraints:
+                    unique: true
+              - column:
+                  name: "password"
+                  type: "text"
+              - column:
+                  name: "role"
+                  type: "text"
+              - column:
+                  name: "registered_at"
+                  type: "timestamp"
+
 
 
 
