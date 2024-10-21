@@ -1,0 +1,181 @@
+openapi: 3.0.3
+
+info:
+  title: Car Service API
+  description: |
+    OpenAPI specification example based on Car model
+  version: 0.0.1
+
+servers:
+  - url: http://localhost:8080/api/v1
+
+tags:
+  - name: car
+    description: Operations related to cars
+
+paths:
+  /cars:
+    get:
+      tags:
+        - car
+      summary: Get all cars with optional filtering by engine power
+      parameters:
+        - in: query
+          name: minEnginePower
+          schema:
+            type: integer
+            minimum: 0
+          description: Minimum engine power filter (optional)
+        - in: query
+          name: maxEnginePower
+          schema:
+            type: integer
+            minimum: 0
+          description: Maximum engine power filter (optional)
+      responses:
+        '200':
+          description: List of cars successfully retrieved
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CarDTO'
+
+    post:
+      tags:
+        - car
+      summary: Create a new car
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CarDTO'
+      responses:
+        '201':
+          description: Car created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CarDTO'
+        '400':
+          description: Invalid input
+
+  /cars/{id}:
+    get:
+      tags:
+        - car
+      summary: Get car by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+          description: ID of the car to retrieve
+      responses:
+        '200':
+          description: Car retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CarDTO'
+        '404':
+          description: Car not found
+
+    put:
+      tags:
+        - car
+      summary: Update an existing car
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+          description: ID of the car to update
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CarDTO'
+      responses:
+        '202':
+          description: Car updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CarDTO'
+        '404':
+          description: Car not found
+
+
+    delete:
+      tags:
+        - car
+      summary: Delete a car by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+          description: ID of the car to delete
+      responses:
+        '204':
+          description: Car deleted successfully
+        '404':
+          description: Car not found
+
+components:
+  schemas:
+    CarDTO:
+      type: object
+      required:
+        - model
+        - enginePower
+        - torque
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        model:
+          type: string
+          example: "Camry"
+        enginePower:
+          type: integer
+          minimum: 1
+          example: 200
+          description: Engine power in horsepower (must be greater than 0)
+        torque:
+          type: integer
+          minimum: 1
+          example: 300
+          description: Torque in Nm (must be greater than 0)
+        ownerUsername:
+          type: string
+          example: "john_doe"
+
+    Car:
+      type: object
+      properties:
+        model:
+          type: string
+          example: "Corolla"
+        enginePower:
+          type: integer
+          minimum: 1
+          example: 180
+        torque:
+          type: integer
+          minimum: 1
+          example: 250
