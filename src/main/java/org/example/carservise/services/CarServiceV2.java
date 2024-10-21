@@ -53,7 +53,7 @@ public class CarServiceV2 {
         existingCar.setTorque(carDTO.getTorque());
 
         if (carDTO.getOwnerUsername() != null) {
-            Owner owner = ownerRepository.findByUsername(carDTO.getOwnerUsername()) // Метод для знаходження власника за юзернеймом
+            Owner owner = ownerRepository.findByUsername(carDTO.getOwnerUsername())
                     .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Owner not found"));
             existingCar.setOwner(owner);
         } else {
